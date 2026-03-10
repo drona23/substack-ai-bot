@@ -1,8 +1,8 @@
 # AI Daily Substack Bot
 
-An end-to-end automation that runs every morning at 7 AM, scrapes the latest AI news, writes a full newsletter post using Claude, and publishes a draft to Substack — completely on its own.
+An end-to-end automation that runs every morning at 7 AM, scrapes the latest AI news, writes a full newsletter post using Claude, and publishes a draft to Substack that completely on its own.
 
-Built by **drona23** — ***REDACTED***
+Built by **drona23** - ***REDACTED***
 Built using **Claude Cowork** by Anthropic
 
 ---
@@ -15,7 +15,7 @@ Built using **Claude Cowork** by Anthropic
 4. Opens a real browser using Playwright, logs into Substack via session cookies
 5. Types the full post into the Substack editor
 6. Inserts Subscribe and Share Post CTA buttons
-7. Saves the draft — ready for one-click publish
+7. Saves the draft ready for one-click publish
 8. Runs automatically every day at 7 AM via macOS launchd
 
 ---
@@ -99,7 +99,7 @@ Each generated post includes:
 - 3–4 top AI stories with "How YOU can use this today" breakdowns for Students, Professionals, and Everyday People
 - New AI Tool Spotlight
 - Key Takeaways
-- References with exact source URLs (no hallucinations — every story is grounded in the RSS feed)
+- References with exact source URLs (no hallucinations, every story is grounded in the RSS feed)
 - Subscribe + Share Post buttons
 - Disclaimer
 
