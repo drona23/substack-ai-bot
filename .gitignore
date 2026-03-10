@@ -1,0 +1,19 @@
+# ── Credentials ───────────────────────────────────────────────────────────────
+.env                        # API keys — NEVER commit this
+
+# ── Generated output ──────────────────────────────────────────────────────────
+posts/                      # local post backups
+images/                     # downloaded cover images
+*.log
+
+# ── Debug screenshots ─────────────────────────────────────────────────────────
+debug_screenshot.png
+final_screenshot.png
+pre_buttons_screenshot.png
+editor_timeout.png
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store

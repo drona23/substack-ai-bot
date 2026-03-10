@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS launchd config – runs daily_ai_post.py at 7:00 AM every day.
+
+  INSTALL:
+    cp com.drona.daily-ai-post.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.drona.daily-ai-post.plist
+
+  UNINSTALL:
+    launchctl unload ~/Library/LaunchAgents/com.drona.daily-ai-post.plist
+    rm ~/Library/LaunchAgents/com.drona.daily-ai-post.plist
+
+  CHECK LOGS:
+    cat /tmp/daily_ai_post.log
+    cat /tmp/daily_ai_post_err.log
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.drona.daily-ai-post</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/drona23/anaconda3/bin/python3</string>
+    <string>/Users/drona23/SubstackBot/daily_ai_post.py</string>
+  </array>
+
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>7</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/daily_ai_post.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/tmp/daily_ai_post_err.log</string>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Users/drona23/anaconda3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+</dict>
+</plist>
