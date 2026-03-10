@@ -52,10 +52,17 @@ def fetch_news_via_rss(queries: list[str], max_per_feed: int = 5) -> str:
                 link     = item.findtext("link", "").strip()
                 if title and title not in seen:
                     seen.add(title)
-                    # Include the real article URL so Claude can cite it exactly
+                    # Follow the Google News redirect to get the real article URL
+                    real_url = link
+                    try:
+                        r = requests.get(link, timeout=8, allow_redirects=True,
+                                         headers={"User-Agent": "Mozilla/5.0"})
+                        real_url = r.url
+                    except Exception:
+                        pass
                     articles.append(
                         f"• [{source}] {title}\n"
-                        f"  URL: {link}\n"
+                        f"  URL: {real_url}\n"
                         f"  {desc[:200]}"
                     )
         except Exception as e:
@@ -107,7 +114,7 @@ Write a Substack newsletter post following ALL of these requirements. Return you
 
   4. **Key Takeaways**: Write exactly 3 short takeaway sentences, each on its own line, each starting with "- " (a single dash and space). Do NOT use "- " on any subsequent lines in the same list — only the very first item should start with "- ", the remaining two items should have NO dash or bullet prefix at all, just plain text on a new line.
 
-  5. **References**: List the exact URLs from the "URL:" fields in the news items provided to you. Write them as plain lines with NO dash or bullet prefix, format: "Source Name: https://exact-url-from-news-item". Only include URLs that were explicitly given to you above — never make up or modify a URL.
+  5. **References**: Do NOT include references inside the body text. They will be handled separately.
 
   6. **Disclaimer**: End with this exact text:
      "Disclaimer: This newsletter is for informational purposes only. AI tools and capabilities change rapidly — always verify information before making decisions based on it."
@@ -117,6 +124,8 @@ Write a Substack newsletter post following ALL of these requirements. Return you
   - Target length: 400–600 words (2-minute read)
   - No jargon, no PhD-speak — write for a general audience
 
+- "references": A JSON array of objects, each with "name" and "url". Use the exact URLs from the "URL:" fields in the news items above. Example format: [{{"name": "TechCrunch", "url": "https://techcrunch.com/..."}}, {{"name": "WIRED", "url": "https://wired.com/..."}}]. Only include URLs that were explicitly given to you — never make up a URL.
+
 - "cover_image_query": A vivid, specific 5-7 word phrase describing a title picture for this post (e.g. "student using AI laptop glowing futuristic")
 
 - "cover_image_description": A 1-2 sentence description of what the ideal cover image for this post should look like (for the reader's reference).
@@ -125,7 +134,7 @@ Return ONLY the JSON object, no extra text."""
 
     response = client.messages.create(
         model="claude-opus-4-6",
-        max_tokens=4096,
+        max_tokens=8096,
         messages=[{"role": "user", "content": prompt}]
     )
 
@@ -320,7 +329,41 @@ def post_to_substack_draft(post: dict, cover_image_url: str | None) -> dict:
             print("  → Body typed")
         except Exception as e:
             print(f"  [ERROR] Could not type body: {e}")
-        _time.sleep(3)
+        _time.sleep(2)
+
+        # ── Type References as real clickable hyperlinks using Cmd+K ─────────
+        references = post.get("references", [])
+        if references:
+            print("  → Adding references as hyperlinks…")
+            page.keyboard.type("\n\nReferences\n", delay=10)
+            _time.sleep(0.3)
+            for ref in references:
+                name = ref.get("name", "Source")
+                url  = ref.get("url", "")
+                if not url:
+                    continue
+                try:
+                    # Type the source name
+                    page.keyboard.type(name, delay=20)
+                    # Select the typed name using Shift+ArrowLeft
+                    for _ in range(len(name)):
+                        page.keyboard.press("Shift+ArrowLeft")
+                    _time.sleep(0.2)
+                    # Open Substack's link dialog with Cmd+K
+                    page.keyboard.press("Meta+k")
+                    _time.sleep(1)
+                    # Type the URL and confirm
+                    page.keyboard.type(url, delay=10)
+                    page.keyboard.press("Enter")
+                    _time.sleep(0.5)
+                    # Move cursor to end of link and go to next line
+                    page.keyboard.press("ArrowRight")
+                    page.keyboard.press("Enter")
+                    print(f"  → Hyperlink added: {name}")
+                except Exception as e:
+                    print(f"  [WARN] Hyperlink for {name}: {e}")
+            _time.sleep(1)
+        _time.sleep(2)
 
         # Wait for Substack auto-save
         print("  → Waiting for auto-save (10s)…")

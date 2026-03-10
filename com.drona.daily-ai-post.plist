@@ -23,8 +23,8 @@
 
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/drona23/anaconda3/bin/python3</string>
-    <string>/Users/drona23/SubstackBot/daily_ai_post.py</string>
+    <string>/bin/bash</string>
+    <string>/Users/drona23/SubstackBot/run_bot.sh</string>
   </array>
 
   <key>StartCalendarInterval</key>
@@ -47,7 +47,7 @@
   <key>EnvironmentVariables</key>
   <dict>
     <key>PATH</key>
-    <string>/Users/drona23/anaconda3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <string>/opt/anaconda3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
   </dict>
 </dict>
 </plist>
