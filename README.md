@@ -7,6 +7,12 @@ Built using **Claude Cowork** by Anthropic
 
 ---
 
+## About
+
+AI Daily Substack Bot is a Python automation project that turns the latest AI headlines into a ready-to-publish Substack draft every day. It combines Google News RSS, Claude-powered writing, optional Pexels cover images, and Playwright browser automation to produce consistent daily newsletter content with minimal manual effort.
+
+---
+
 ## What it does
 
 1. Scrapes real-time AI news from Google News RSS (no API cost)
