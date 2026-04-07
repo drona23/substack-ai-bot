@@ -2,7 +2,7 @@
 
 An end-to-end automation that runs every morning at 7 AM, scrapes the latest AI news, writes a full newsletter post using Claude, and publishes a draft to Substack that completely on its own.
 
-Built by **drona23** - ***REDACTED***
+Built by **drona23** 
 Built using **Claude Cowork** by Anthropic
 
 ---
